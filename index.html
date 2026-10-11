@@ -309,9 +309,8 @@
     <label>Referência do texto base
       <input type="text" id="f-ref" placeholder="Ex: Tiago 4:8">
     </label>
-    <label>Pontos importantes
-      <textarea id="f-pontos" placeholder="Um ponto por linha" style="min-height:120px"></textarea>
-      <span class="hint">Um ponto por linha — a numeração é gerada automaticamente.</span>
+    <label>Resumo do estudo
+      <textarea id="f-pontos" placeholder="Escreva aqui o resumo do estudo" style="min-height:160px"></textarea>
     </label>
     <label>Para finalizar
       <textarea id="f-final" placeholder="Frase de encerramento do estudo" style="min-height:60px"></textarea>
@@ -522,9 +521,6 @@
   function numbered(arr){
     return arr.map(function(item, i){ return (i+1)+". "+item; }).join("\n");
   }
-  function linesFromTextarea(val){
-    return String(val||"").split("\n").map(function(s){return s.trim();}).filter(Boolean);
-  }
 
   function buildText(){
     var f = collectFields();
@@ -589,10 +585,9 @@
       lines.push("📖 Texto Base — "+f.ref);
       lines.push("");
     }
-    lines.push("🎯 PONTOS IMPORTANTES");
+    lines.push("🎯 RESUMO DO ESTUDO");
     lines.push("");
-    var pontos = linesFromTextarea(f.pontos);
-    lines.push(pontos.length ? numbered(pontos) : "—");
+    lines.push(f.pontos.trim() || "—");
     lines.push("");
     lines.push("🎯 PARA FINALIZAR");
     lines.push("");
