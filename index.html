@@ -28,7 +28,7 @@
     color:var(--ink);
     font-family:var(--font-body);
     padding-inline:16px;
-    padding-block:28px 120px;
+    padding-block:28px calc(28px + env(safe-area-inset-bottom, 0px));
   }
   .page{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:22px;}
   .header-row{display:flex;align-items:center;gap:16px;}
@@ -204,16 +204,9 @@
   }
 
   .action-bar{
-    position:sticky;
-    bottom:0;
-    bottom:env(safe-area-inset-bottom, 0px);
     display:flex;
     flex-wrap:wrap;
     gap:10px;
-    padding-block:12px;
-    padding-bottom:calc(12px + env(safe-area-inset-bottom, 0px));
-    background:linear-gradient(to top, var(--bg) 60%, transparent);
-    margin-top:-8px;
   }
   .btn{
     flex:1 1 0;
@@ -282,16 +275,17 @@
   <section class="card">
     <h2><span class="num">2</span>Membros</h2>
     <p class="hint">Escolha, para cada pessoa, se fez encontro (entra na Base; já conta como batizado) ou fez batismo (entra em Batizados sem ECD) ou falta ECD e batismo (novo convertido que ainda não fez encontro nem batismo). Marque também quem esteve presente e, se faltou, se avisou (justificado).</p>
+    <p class="hint"><strong>Insira todos os membros da rede.</strong> Comece pelo primeiro nome e toque em “+ Adicionar membro” para incluir os demais.</p>
     <div id="members-list"></div>
     <button class="add" id="add-member" type="button">+ Adicionar membro</button>
     <div class="summary-strip" id="members-summary"></div>
   </section>
 
   <section class="card">
-    <h2><span class="num">3</span>Visitantes</h2>
+    <h2><span class="num">3</span>Visitantes não crentes</h2>
     <p class="hint">Pessoas de fora que vieram na rede. Deixe vazio se não teve.</p>
     <div id="visitors-list"></div>
-    <button class="add" id="add-visitor" type="button">+ Adicionar visitante</button>
+    <button class="add" id="add-visitor" type="button">+ Adicionar visitante não crente</button>
   </section>
 
   <section class="card">
@@ -341,14 +335,15 @@
     </div>
     <p class="copied-msg" id="copied-msg"></p>
   </section>
+
+  <div class="action-bar">
+    <p class="req-msg" id="req-msg" hidden></p>
+    <button class="btn btn-send" id="btn-whatsapp" type="button">📤 Enviar</button>
+    <button class="btn btn-secondary" id="btn-reset" type="button">Limpar</button>
+    <button class="btn btn-secondary" id="btn-copy" type="button">Copiar texto</button>
+  </div>
 </div>
 
-<div class="action-bar">
-  <p class="req-msg" id="req-msg" hidden></p>
-  <button class="btn btn-send" id="btn-whatsapp" type="button">📤 Enviar</button>
-  <button class="btn btn-secondary" id="btn-reset" type="button">Limpar</button>
-  <button class="btn btn-secondary" id="btn-copy" type="button">Copiar texto</button>
-</div>
 
 <script>
 (function(){
@@ -361,13 +356,6 @@
   var output = document.getElementById("output");
 
   var defaultMembers = [
-    {name:"", categoria:"encontro", presente:true, justificado:false},
-    {name:"", categoria:"encontro", presente:true, justificado:false},
-    {name:"", categoria:"encontro", presente:true, justificado:false},
-    {name:"", categoria:"encontro", presente:true, justificado:false},
-    {name:"", categoria:"encontro", presente:true, justificado:false},
-    {name:"", categoria:"encontro", presente:true, justificado:false},
-    {name:"", categoria:"encontro", presente:true, justificado:false},
     {name:"", categoria:"encontro", presente:true, justificado:false}
   ];
   var members = [];
@@ -508,14 +496,14 @@
     if(visitors.length === 0){
       var empty = document.createElement("p");
       empty.className = "hint";
-      empty.textContent = "Nenhum visitante adicionado — o relatório mostrará \"Não teve.\"";
+      empty.textContent = "Nenhum visitante não crente adicionado — o relatório mostrará \"Não teve.\"";
       visitorsList.appendChild(empty);
     }
     visitors.forEach(function(v, idx){
       var row = document.createElement("div");
       row.className = "list-row";
       row.innerHTML =
-        '<input type="text" value="'+escapeAttr(v)+'" placeholder="Nome do visitante">'+
+        '<input type="text" value="'+escapeAttr(v)+'" placeholder="Nome do visitante não crente">'+
         '<button class="icon-btn" type="button" title="Remover">✕</button>';
       row.querySelector("input").addEventListener("input", function(e){
         visitors[idx] = e.target.value; update();
