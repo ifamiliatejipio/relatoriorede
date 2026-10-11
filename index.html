@@ -744,7 +744,9 @@
     byId("f-final").value = draft.final || "";
     byId("f-extra").value = draft.extra || "";
     byId("f-comunhao").checked = draft.comunhao !== undefined ? draft.comunhao : true;
-    members = Array.isArray(draft.members) && draft.members.length ? draft.members : defaultMembers.map(function(m){ return Object.assign({id:uid()}, m); });
+    // Descarta campos de nome vazios do rascunho; sempre sobra pelo menos 1 campo.
+    members = Array.isArray(draft.members) ? draft.members.filter(function(m){ return m && (m.name || "").trim(); }) : [];
+    if(!members.length) members = defaultMembers.map(function(m){ return Object.assign({id:uid()}, m); });
     members.forEach(function(m){
       if(!m.id) m.id = uid();
       if(!m.categoria){
