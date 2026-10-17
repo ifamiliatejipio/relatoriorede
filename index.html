@@ -533,8 +533,10 @@
     var visitorsClean = visitors.filter(function(v){return v.trim();});
 
     var lines = [];
-    lines.push(f.nome || "Rede");
-    if(f.ministerio) lines.push("⛪ Ministério: "+f.ministerio);
+    var nome = f.nome.trim();
+    // Coloca "Rede" antes do nome, sem repetir se a pessoa já escreveu "Rede ...".
+    lines.push(!nome ? "Rede" : /^rede\b/i.test(nome) ? nome : "Rede "+nome);
+    if(f.ministerio) lines.push("Ministério: "+f.ministerio);
     lines.push("");
     lines.push("📆 "+(toBR(f.data)||"--/--/----")+" - ⏰ "+(f.hora||"--:--")+"h");
     lines.push("🏠 Local da rede: "+(f.local||"—"));
