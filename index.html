@@ -565,7 +565,7 @@
     lines.push("FALTOU ❌");
     lines.push("");
     lines.push(faltou.length ? numbered(faltou.map(function(m){
-      if(!m.justificado) return m.name;
+      if(!m.justificado) return m.name + " (Não justificado)";
       var motivo = (m.motivo||"").trim();
       return m.name + " (Justificado" + (motivo ? ": "+motivo : "") + ")";
     })) : "Não teve.");
